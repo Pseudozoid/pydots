@@ -1,0 +1,9 @@
+{
+  "dotfiles": {
+    "bashrc": "~/.bashrc",
+    "nvim": "~/.config/nvim",
+    "hyprland": "~/.config/hypr"
+  },
+  "backup_dir": "~/.pydots-backup"
+}
+

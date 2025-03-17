@@ -3,6 +3,7 @@ import json
 import pathlib
 import shutil
 from datetime import datetime
+from tqdm import tqdm
 
 print("Welcome to pydots!")
 def load_config():
@@ -21,8 +22,14 @@ for name, path in config["dotfiles"].items():
 
     if not dest.exists():
         if src.is_file():
-            shutil.copy(src, dest)
-            print(f"Backed up {name} to {dest}")
+            file_size = src.stat().st_size
+            chunk_size = 10
+            
+            with open(str(src), 'rb') as src_file, open(str(dest), 'wb') as dest_file:
+                with tqdm(total=file_size, unit='B', unit_scale=True, desc=f"Copying {name}") as pbar:
+                    while chunk := src_file.read(chunk_size):
+                        dest_file.write(chunk)
+                        pbar.update(len(chunk))
 
         elif src.is_dir():
             dest.mkdir(parents=True, exist_ok=True)

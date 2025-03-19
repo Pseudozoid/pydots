@@ -4,13 +4,9 @@ import pathlib
 import shutil
 from datetime import datetime
 from tqdm import tqdm
+from utils import load_config
 
 print("Welcome to pydots!")
-def load_config():
-    with open('config.json', 'r') as file:
-        config = json.load(file)
-    return config
-
 config = load_config()
 
 BACKUP_PATH = pathlib.Path(config["backup_dir"]).expanduser()
@@ -23,7 +19,7 @@ for name, path in config["dotfiles"].items():
     if not dest.exists():
         if src.is_file():
             file_size = src.stat().st_size
-            chunk_size = 10
+            chunk_size = 4096
             
             with open(str(src), 'rb') as src_file, open(str(dest), 'wb') as dest_file:
                 with tqdm(total=file_size,
